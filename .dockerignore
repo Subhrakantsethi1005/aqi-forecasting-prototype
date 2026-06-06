@@ -1,0 +1,14 @@
+.git
+.github
+.venv
+venv
+env
+__pycache__
+*.pyc
+.pytest_cache
+.ipynb_checkpoints
+data/*.csv
+models/*
+reports/*
+notebooks
+AQI FORECASTING.ipynb
