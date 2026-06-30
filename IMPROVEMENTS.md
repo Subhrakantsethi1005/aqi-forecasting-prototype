@@ -2,11 +2,11 @@
 
 ## Model Quality
 
-1. Add walk-forward validation instead of one train/test split.
+1. ~~Add walk-forward validation instead of one train/test split.~~ ✅ Done — `scripts/walk_forward.py` (expanding-window CV, reports per-fold + per-station metrics).
 2. Train separate models per station or add station embeddings.
 3. Add prediction intervals with quantile regression or MC dropout.
 4. Add multi-step forecasting for 6-hour, 12-hour, and 24-hour horizons.
-5. Add direct AQI category classification alongside numeric regression.
+5. ~~Add direct AQI category classification alongside numeric regression.~~ ✅ Done — `scripts/train_classifier.py` trains a binary "unhealthy air" (AQI > 100) classifier and reports ROC-AUC / PR-AUC.
 6. Add ensemble selection across LSTM, tree models, and baselines.
 
 ## Data
@@ -14,6 +14,7 @@
 1. Keep raw data in `data/raw/` and processed data in `data/processed/`.
 2. Add `station_id`, latitude, longitude, and source metadata.
 3. Add weather forecast features when predicting future AQI.
+   - ~~Add a real-data source so the model sees genuine high-AQI events.~~ ✅ Done — `scripts/download_dataset.py --source openaq` fetches real measurements from OpenAQ v3.
 4. Validate pollutant units before training.
 5. Add a data dictionary and dataset license.
 
