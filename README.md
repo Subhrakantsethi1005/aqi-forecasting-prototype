@@ -55,7 +55,7 @@ pip install -e .
 ```
 
 ### 2. Generate Demo Data
-Don't have a dataset? Use the built-in generator to create a sample instantly:
+Don't have a dataset? The built-in generator creates a usable multi-station synthetic dataset at `data/aqi_dataset.csv` (3 stations, ~4,500 hourly rows) — the path every command below expects:
 ```bash
 python scripts/generate_sample_data.py
 ```
@@ -84,13 +84,14 @@ Visit `http://localhost:8000` (for FastAPI) or the displayed URL (for Streamlit)
 ## 🧠 Technical Deep Dive
 
 ### Data Processing
-The pipeline handles raw pollutant readings (`PM2.5`, `PM10`, `NO2`, etc.) and weather variables. It automatically fills gaps and computes the 24-hour rolling averages required for official AQI standards.
+The pipeline handles raw pollutant readings (`PM2.5`, `PM10`, `NO2`, etc.) and weather variables. It coerces values to numeric, clips extreme outliers (0.1st–99.9th percentile), and interpolates/fills short gaps. The CPCB AQI target is then derived per row from pollutant sub-indices (max-sub-index rule).
 
 ### Feature Engineering
-To capture temporal dynamics, the model uses:
-*   **Lagged Features:** Past 1-24 hour readings to capture momentum.
-*   **Rolling Stats:** Means and standard deviations to capture volatility.
-*   **Cyclical Encoding:** Sine/Cosine transforms for time of day to ensure the model understands 23:00 is close to 00:00.
+To capture temporal dynamics, each row is enriched (per station) with:
+*   **Lagged Features:** the value 1 hour ago and 24 hours ago — recent momentum plus the same hour on the previous day.
+*   **Rolling Mean:** a 24-hour rolling average (shifted to avoid leakage) to capture the local trend.
+*   **Time Features:** `hour`, `day_of_week`, `month`, and an `is_weekend` flag — computed for the *future* hour being forecast, since those are known in advance.
+*   **Station Context:** one-hot station IDs plus latitude/longitude/distance, so the model can tell stations apart.
 
 ### Model Performance
 The served model is a **GradientBoostingRegressor** forecasting AQI one hour ahead. On a chronological 80/20 test split it beats a persistence baseline, which is the honest test of forecasting skill:
