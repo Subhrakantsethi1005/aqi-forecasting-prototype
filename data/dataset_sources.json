@@ -1,0 +1,32 @@
+{
+  "primary": {
+    "name": "Original AQI notebook dataset",
+    "expected_local_path": "data/aqi_dataset.csv",
+    "google_drive_file_id": "1-JdY0p0PHt34VHlULz8RkR9B62k-Futb",
+    "notes": [
+      "This is the file ID used in the original notebook.",
+      "Verify redistribution permission before uploading the full CSV to GitHub.",
+      "If the dataset is large, publish it through GitHub Releases, Kaggle, Zenodo, Google Drive, or Hugging Face Datasets."
+    ]
+  },
+  "required_columns": [
+    "Datetime",
+    "PM2.5",
+    "PM10",
+    "NO2",
+    "SO2",
+    "CO",
+    "O3",
+    "Temperature",
+    "Humidity",
+    "WindSpeed"
+  ],
+  "optional_columns": [
+    "station_id",
+    "lat",
+    "lon",
+    "distance_km",
+    "AQI_CPCB",
+    "AQI_Category"
+  ]
+}
